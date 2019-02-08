@@ -3,7 +3,7 @@ const Sequelize = require('sequelize')
 const bodyParser = require('body-parser')
 
 const connectionString = process.env.DATABASE_URL || 'postgres://postgres:secret@localhost:5432/postgres'
-const sequelize = new Sequelize(connectionString, {define: { timestamps: false }})
+const sequelize = new Sequelize(connectionString, { define: { timestamps: false } })
 
 const app = express()
 app.listen(4001, () => console.log('Express API listening on port 4001'))
@@ -13,18 +13,36 @@ app.listen(4001, () => console.log('Express API listening on port 4001'))
 // app.listen(process.env.PORT || port, () => `Listening on port ${port}`)
 // console.log("my process env port is", process.env.PORT)
 
+sequelize.define('playlists')
 
 
-// SEQUELIZE CONSTANT
+// PLAYLIST
 const Playlist = sequelize.define('playlist', {
-    playlist: Sequelize.STRING
+    name: Sequelize.STRING
 }, {
         tableName: 'playlists'
     })
 
 Playlist.sync()
 
-// // GET ALL HOUSES
+// SONG
+const Song = sequelize.define('songs', {
+    title: Sequelize.STRING,
+    artist: Sequelize.STRING,
+    album: Sequelize.STRING,
+    playlistId: {
+        type: Sequelize.INTEGER,
+        field: 'playlist_id'
+    }
+}, {
+        tableName: 'songs'
+    })
+
+Song.sync()
+
+Song.belongsTo(Playlist)
+
+// // GET ALL PLAYLISTS
 app.get('/playlists', function (req, res, next) {
     Playlist.findAll()
         .then(playlists => {
@@ -38,7 +56,7 @@ app.get('/playlists', function (req, res, next) {
         })
 })
 
-// // GET ONE HOUSE
+// // GET ONE PLAYLIST
 app.get('/playlists/:id', function (req, res, next) {
     const id = req.params.id
     Playlist.findById(id)
@@ -47,7 +65,7 @@ app.get('/playlists/:id', function (req, res, next) {
         })
 })
 
-// //POST
+// //POST ONE PLAYLIST
 app.use(bodyParser.json())
 
 app.post('/playlists', function (req, res) {
@@ -62,7 +80,7 @@ app.post('/playlists', function (req, res) {
         })
 })
 
-// // DELETE
+// // DELETE ONE PLAYLIST
 app.delete('/playlists/:id', function (req, res) {
     const id = req.params.id
     Playlist.findById(id)
@@ -71,21 +89,52 @@ app.delete('/playlists/:id', function (req, res) {
             .then(playlist => console.log(`The playlist with ID ${playlist.id} has now been deleted!`)))
 })
 
-// House.create({
-//     title: 'Multi Million Estate',
-//     address: 'This was build by a super-duper rich programmer',
-//     size: 1235,
-//     price: 98400000
-// }).then(house => console.log(`The house is now created. The ID = ${house.id}`))
 
-// // PUT
-// app.put('/houses/:id', function (req, res) {
-//     const id = req.params.id
-//     House.findById(id)
-//         .then(house => house.update({
-//             title: 'Super Duper Million Dollar Mainson'
-//         })
-//             .then(house => res.status(200).json(house))
-//             .then(house2 => console.log(`The house with ID ${house2.id} is now updated`, house2.values)))
-// })
+// // GET ALL SONGS
+app.get('/songs', function (req, res, next) {
+    Song.findAll()
+        .then(songs => {
+            res.json({ songs: songs })
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Something went wrong',
+                error: err
+            })
+        })
+})
+
+// GET ONE SONG
+app.get('/songs/:id', function (req, res, next) {
+    const id = req.params.id
+    Song.findById(id)
+        .then(songs => {
+            res.json({ message: `Read playlist ${id}`, songs })
+        })
+})
+
+// POST ONE SONG
+app.post('/playlists/:id/songs', function (req, res) {
+    Song
+        .create(req.body)
+        .then(song => res.status(201).json(song))
+        .catch(err => {
+            res.status(500).json({
+                message: 'Something went wrong',
+                error: err
+            })
+        })
+})
+
+
+// Song.create({
+//     title: 'Ow Yeah!',
+//     artist: 'Johnny Gazebo',
+//     album: 'ALl Night Long',
+//     playlistId: 5
+// }).then(song => console.log(`The song is now created. The ID = ${song.id}`))
+
+// Playlist.create({
+//     name: 'My favourite hiphop music'
+// }).then(playlist => console.log(`The playlist is now created. The ID = ${playlist.id}`))
 
