@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt')
 const User = require('../users/model')
 const auth = require('./middleware')
 
-
 const router = new Router()
 
 router.post('/tokens', (req, res) => {

@@ -6,7 +6,7 @@ const router = new Router()
 
 // GET ALL PLAYLISTS
 router.get('/playlists', auth, function (req, res, next) {
-    
+
     Playlist.findAll({
         where: {
             userId: req.user.id
@@ -58,15 +58,15 @@ router.post('/playlists', auth, function (req, res) {
 
 // DELETE ONE PLAYLIST
 router.delete('/playlists/:id', auth, function (req, res) {
-    
+
     Playlist.destroy({
         where: {
             userId: req.user.id,
             id: req.params.id
         }
-      }).then(affectedRows => {
-          res.status(204).json({});
-      }).catch(err => {
+    }).then(affectedRows => {
+        res.status(204).json({});
+    }).catch(err => {
         res.status(500).json({
             message: 'Something went wrong',
             error: err

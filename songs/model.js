@@ -9,7 +9,7 @@ const Song = sequelize.define('songs', {
     playlistId: {
         type: Sequelize.INTEGER,
         field: 'user_id',
-        allowNull:true,
+        allowNull: true,
     }
 }, {
         tableName: 'songs'

@@ -16,12 +16,12 @@ router.post('/users', (req, res, next) => {
       email: req.body.email,
     }
   }).then(users => {
-      if (users.length > 0) {
-        return res.status(400).send({
-          message: `Your email address already registered`
-        })
-      }
-    });
+    if (users.length > 0) {
+      return res.status(400).send({
+        message: `Your email address already registered`
+      })
+    }
+  });
 
   const user = {
     email: req.body.email,

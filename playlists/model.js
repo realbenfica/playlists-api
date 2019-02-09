@@ -7,11 +7,10 @@ const Playlist = sequelize.define('playlist', {
     userId: {
         type: Sequelize.INTEGER,
         field: 'user_id',
-        allowNull:true,
+        allowNull: true,
     }
 }, {
         tableName: 'playlists',
-        
     })
 
 Playlist.belongsTo(User);
