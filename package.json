@@ -2,9 +2,9 @@
   "name": "homework",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "db.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node db.js"
   },
   "keywords": [],
   "author": "",
