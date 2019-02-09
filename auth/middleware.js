@@ -1,5 +1,5 @@
 const User = require('../users/model')
-const { toData } = require ('./jwt')
+const { toData } = require('./jwt')
 
 
 function auth(req, res, next) {
@@ -17,7 +17,7 @@ function auth(req, res, next) {
         })
         .catch(next)
     }
-    catch(error) {
+    catch (error) {
       res.status(400).send({
         message: `Error ${error.name}: ${error.message}`,
       })
