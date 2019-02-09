@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { toJWT, toData } = require('./jwt')
-
+const bcrypt = require('bcrypt')
 const User = require('../users/model')
 const auth = require('./middleware')
 
@@ -13,7 +13,7 @@ router.post('/tokens', (req, res) => {
       message: `Please supply a valid email and password`
     })
   }
-  else {
+  else {// 1. find user based on email address
     User
       .findOne({
         where: {
@@ -26,7 +26,15 @@ router.post('/tokens', (req, res) => {
             message: 'User with that email does not exist'
           })
         }
-        if (req.body.password, entity.password) {
+
+        // 2. use bcrypt.compareSync to check the password against the stored hash
+        if (
+          // bcrypt.compareSync(
+          req.body.password, entity.password
+          // )
+        ) {
+
+          // 3. if the password is correct, return a JWT with the userId of the user (user.id)
           res.send({
             jwt: toJWT({ userId: entity.id })
           })
