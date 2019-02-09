@@ -12,7 +12,7 @@ const User = sequelize.define('users', {
   },
   password_confirmation: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: true
   },
 }, {
   timestamps: false,

@@ -6,13 +6,14 @@ const Playlist = sequelize.define('playlist', {
     name: Sequelize.STRING,
     userId: {
         type: Sequelize.INTEGER,
-        field: 'user_id'
+        field: 'user_id',
+        allowNull:true,
     }
 }, {
         tableName: 'playlists',
-
+        
     })
 
-Playlist.belongsTo(User)
+Playlist.belongsTo(User);
 
 module.exports = Playlist
